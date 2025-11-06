@@ -1,0 +1,1218 @@
+{
+  "name": "01 Gamdom Assessment Task - Shahid",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "authentication": "airtableTokenApi",
+        "baseId": {
+          "__rl": true,
+          "value": "appTh7NR33Da4r5hO",
+          "mode": "id"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "tbl05ZdhFe2cE6mwD",
+          "mode": "id"
+        },
+        "triggerField": "Created time",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtableTrigger",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        -64
+      ],
+      "id": "5cc44e80-89d3-479b-ae38-055e0ead2d99",
+      "name": "New Row Trigger",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZXR7nEzmRSaSdFx4",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1415065274679296214",
+          "mode": "list",
+          "cachedResultName": "Shahid's server",
+          "cachedResultUrl": "https://discord.com/channels/1415065274679296214"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1415065275879133288",
+          "mode": "list",
+          "cachedResultName": "general",
+          "cachedResultUrl": "https://discord.com/channels/1415065274679296214/1415065275879133288"
+        },
+        "content": "=**Data Validation Error**\n\nRequired fields are missing!\n\n**Record ID:** {{ $json.id }}\n**Timestamp:** {{ $json.fields[\"Created At\"].toDateTime() }}\n     \n**Submitted Data:**\n\n- Name: {{ $json.fields.Name || 'N/A' }}\n- Email: {{ $json.fields.Email || 'N/A' }}\n- Transaction ID: {{ $json.fields['Transaction ID'] || 'N/A' }}\n- Address: {{ $json.fields['Address'] || 'N/A' }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        352,
+        208
+      ],
+      "id": "417678e7-bf53-456e-9b21-b24b080453bb",
+      "name": "Notify for missing fields",
+      "webhookId": "6966c3ce-f664-48f6-b197-a5415d6f954a",
+      "credentials": {
+        "discordBotApi": {
+          "id": "afD481lypwDcHCbO",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendAndWait",
+        "guildId": {
+          "__rl": true,
+          "value": "1415065274679296214",
+          "mode": "list",
+          "cachedResultName": "Shahid's server",
+          "cachedResultUrl": "https://discord.com/channels/1415065274679296214"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1415065275879133288",
+          "mode": "list",
+          "cachedResultName": "general",
+          "cachedResultUrl": "https://discord.com/channels/1415065274679296214/1415065275879133288"
+        },
+        "message": "=🔔 **New Approval Request**\n\n**Record Details:**\n- **Name**: {{ $json.fields.Name || 'N/A' }}\n- **Email**: {{ $json.fields.Email || 'N/A' }}\n- **Transaction ID**: {{ $json.fields['Transaction ID'] || 'N/A' }}\n- **Address**: {{ $json.fields['Address'] || 'N/A' }}",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeUnit": "minutes"
+            }
+          },
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        64,
+        -368
+      ],
+      "id": "6d143cdc-217e-4562-88f7-e8d88a485538",
+      "name": "Send Approval",
+      "webhookId": "e4ad33b8-9eca-4c32-ab94-23617fcbdd5b",
+      "credentials": {
+        "discordBotApi": {
+          "id": "afD481lypwDcHCbO",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5b84cc61-9a13-469f-b90f-80ff43430fe2",
+              "leftValue": "={{ $json.fields.Name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "63b1229c-0874-484e-966d-1eba6903eadc",
+              "leftValue": "={{ $json.fields.Email }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "7b42fa6d-8c95-4def-8ab7-e55bdb8848cd",
+              "leftValue": "={{ $json.fields[\"Transaction ID\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -288,
+        -80
+      ],
+      "id": "9491434d-9cde-4308-a469-d53d5e732f1e",
+      "name": "Validate required fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "54a7192a-d133-47b5-88fa-75db388f79b3",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        -368
+      ],
+      "id": "f8d4547a-6c58-49d9-bc18-7cb2bdaedab4",
+      "name": "Check if approved"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appTh7NR33Da4r5hO",
+          "mode": "list",
+          "cachedResultName": "Gamdom Base",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl05ZdhFe2cE6mwD",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO/tbl05ZdhFe2cE6mwD"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('New Row Trigger').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Transaction ID",
+              "displayName": "Transaction ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Approved",
+              "displayName": "Approved",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        688,
+        -544
+      ],
+      "id": "1a7e0441-84b8-43fe-a96e-8d5bbd76e659",
+      "name": "Mark record approved",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZXR7nEzmRSaSdFx4",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appTh7NR33Da4r5hO",
+          "mode": "list",
+          "cachedResultName": "Gamdom Base",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl05ZdhFe2cE6mwD",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO/tbl05ZdhFe2cE6mwD"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('New Row Trigger').item.json.id }}",
+            "Approved": false
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Transaction ID",
+              "displayName": "Transaction ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Address",
+              "displayName": "Address",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Approved",
+              "displayName": "Approved",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        688,
+        -144
+      ],
+      "id": "d270899f-9e6c-4e3e-a771-3952ce136198",
+      "name": "Mark record disapproved",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZXR7nEzmRSaSdFx4",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/endpoint",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n\nid: {{ $('New Row Trigger').item.json.id }},\ncreatedTime: {{ $('New Row Trigger').item.json.createdTime }},\nfields: {{ $('New Row Trigger').item.json.fields }}\n\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1088,
+        -352
+      ],
+      "id": "306cc5fe-7236-43fe-8164-239e3f576b9e",
+      "name": "Send data to API",
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 2000,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appTh7NR33Da4r5hO",
+          "mode": "list",
+          "cachedResultName": "Gamdom Base",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0G85VISw0ut7rH",
+          "mode": "list",
+          "cachedResultName": "Table 2",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO/tbl0G85VISw0ut7rH"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Logs": "=Workflow executed successfully without any errors for row ID {{ $('New Row Trigger').item.json.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Logs",
+              "displayName": "Logs",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1456,
+        -528
+      ],
+      "id": "7c546fc1-6544-48e0-bda0-6f64bf468db9",
+      "name": "Send log",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZXR7nEzmRSaSdFx4",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appTh7NR33Da4r5hO",
+          "mode": "list",
+          "cachedResultName": "Gamdom Base",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0G85VISw0ut7rH",
+          "mode": "list",
+          "cachedResultName": "Table 2",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO/tbl0G85VISw0ut7rH"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Logs": "=Required fields missing for row ID {{ $('New Row Trigger').item.json.id }}."
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Logs",
+              "displayName": "Logs",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        208
+      ],
+      "id": "b4679a09-22a3-45db-b0bb-b7b3a576f454",
+      "name": "Send log1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZXR7nEzmRSaSdFx4",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appTh7NR33Da4r5hO",
+          "mode": "list",
+          "cachedResultName": "Gamdom Base",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0G85VISw0ut7rH",
+          "mode": "list",
+          "cachedResultName": "Table 2",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO/tbl0G85VISw0ut7rH"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Logs": "=Error sending record to an API for row ID {{ $('New Row Trigger').item.json.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Logs",
+              "displayName": "Logs",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1456,
+        -192
+      ],
+      "id": "63335ed6-6160-41ad-9168-f79dcfe5a7ba",
+      "name": "Send log2",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZXR7nEzmRSaSdFx4",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appTh7NR33Da4r5hO",
+          "mode": "list",
+          "cachedResultName": "Gamdom Base",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0G85VISw0ut7rH",
+          "mode": "list",
+          "cachedResultName": "Table 2",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO/tbl0G85VISw0ut7rH"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Logs": "=Record marked as unapproved for row ID {{ $('New Row Trigger').item.json.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Logs",
+              "displayName": "Logs",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1088,
+        112
+      ],
+      "id": "a0602076-2b68-4768-b498-84ca73277207",
+      "name": "Send log4",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZXR7nEzmRSaSdFx4",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Trigger workflow\n\n* Whenever new record is created\n",
+        "height": 400,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -688,
+        -224
+      ],
+      "id": "45859009-b9e9-47b7-b0cc-341e0a1fcaf3",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Validate required fields\n\n",
+        "height": 400,
+        "width": 224,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        -224
+      ],
+      "id": "4880698c-27c5-449b-88e6-6e3d4886ad90",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Send approval\n\n* Sends row data for approval\n",
+        "height": 320,
+        "width": 224,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -528
+      ],
+      "id": "fcccbbb8-622c-4672-b0ed-949fb7c7addd",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Notify on Discord\n\n* Notify on discord for missing required fields\n",
+        "height": 320,
+        "width": 224,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        288,
+        64
+      ],
+      "id": "d2529aad-c54f-4593-b4df-5ec5d7839be0",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Send Logs\n\n* Send log error for missing fields\n",
+        "height": 320,
+        "width": 224,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        64
+      ],
+      "id": "c680baf8-fcf4-428e-b396-23d788a3648d",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Send Logs\n\n* Add log for successful API response\n",
+        "height": 288,
+        "width": 224,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        -656
+      ],
+      "id": "313c73a6-1b93-44c0-b940-ca564ada65cf",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Check if row is approved\n\n* Check if user is marked row as approved",
+        "height": 320,
+        "width": 224,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        288,
+        -528
+      ],
+      "id": "6b7c58d7-c1d6-4819-b558-62d9f2759bd2",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Mark Approved\n\n* Mark record as approved in table\n",
+        "height": 320,
+        "width": 256,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        -688
+      ],
+      "id": "b597656a-3ec7-43a6-8e1a-4b3f099d56f0",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Mark Disapproved\n\n* Mark record as disapproved in table\n",
+        "height": 320,
+        "width": 256,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        -288
+      ],
+      "id": "313fec42-8741-46ca-9179-6835406ce015",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "## Send Logs\n\n* Add log entry for row approved\n",
+        "height": 320,
+        "width": 224,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        -864
+      ],
+      "id": "939b4cd4-393c-4950-be0a-256d9e03c1a3",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appTh7NR33Da4r5hO",
+          "mode": "list",
+          "cachedResultName": "Gamdom Base",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0G85VISw0ut7rH",
+          "mode": "list",
+          "cachedResultName": "Table 2",
+          "cachedResultUrl": "https://airtable.com/appTh7NR33Da4r5hO/tbl0G85VISw0ut7rH"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Logs": "=Record marked as approved for row ID {{ $('New Row Trigger').item.json.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Logs",
+              "displayName": "Logs",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Created At",
+              "displayName": "Created At",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1088,
+        -720
+      ],
+      "id": "6e4a5e1e-3e5d-4112-aa7e-67f285d77577",
+      "name": "Send log3",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZXR7nEzmRSaSdFx4",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Send Logs\n\n* Add log entry for row disapproved\n",
+        "height": 320,
+        "width": 224,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        -48
+      ],
+      "id": "dc7a6213-545a-486d-8e50-71f8ccaa2a9f",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "## API\n\n* Send row data to an API",
+        "height": 336,
+        "width": 224,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        -464
+      ],
+      "id": "bd9ccf50-8572-4a12-83bf-501259faf0e1",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Send Logs\n\n* Add log for failed API response\n",
+        "height": 320,
+        "width": 224,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        -336
+      ],
+      "id": "c60f1dd6-7be3-4d53-9e7b-c4e28329f0f7",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "1415065274679296214",
+          "mode": "list",
+          "cachedResultName": "Shahid's server",
+          "cachedResultUrl": "https://discord.com/channels/1415065274679296214"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "1415065275879133288",
+          "mode": "list",
+          "cachedResultName": "general",
+          "cachedResultUrl": "https://discord.com/channels/1415065274679296214/1415065275879133288"
+        },
+        "content": "=✅ Workflow Completed\nRecord ID: {{ $('New Row Trigger').item.json.id }}\n\n\n**Record Details:**\n- **Name**: {{ $json.fields.Name || 'N/A' }}\n- **Email**: {{ $json.fields.Email || 'N/A' }}\n- **Transaction ID**: {{ $json.fields['Transaction ID'] || 'N/A' }}\n- **Address**: {{ $json.fields['Address'] || 'N/A' }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        1792,
+        -528
+      ],
+      "id": "04a0a3db-25ab-4713-ad55-b11e0c540b0c",
+      "name": "Send final message",
+      "webhookId": "76e01520-d074-4edf-a946-d3136fbf9d8f",
+      "credentials": {
+        "discordBotApi": {
+          "id": "afD481lypwDcHCbO",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Send notification\n\n* Sends final notification\n",
+        "height": 288,
+        "width": 224,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        -656
+      ],
+      "id": "fbc1b8a5-ad3e-4e7d-b6c0-433484048afc",
+      "name": "Sticky Note10"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "New Row Trigger": {
+      "main": [
+        [
+          {
+            "node": "Validate required fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Approval": {
+      "main": [
+        [
+          {
+            "node": "Check if approved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate required fields": {
+      "main": [
+        [
+          {
+            "node": "Send Approval",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send log1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if approved": {
+      "main": [
+        [
+          {
+            "node": "Mark record approved",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mark record disapproved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark record approved": {
+      "main": [
+        [
+          {
+            "node": "Send data to API",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send log3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send data to API": {
+      "main": [
+        [
+          {
+            "node": "Send log",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send log2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send log1": {
+      "main": [
+        [
+          {
+            "node": "Notify for missing fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark record disapproved": {
+      "main": [
+        [
+          {
+            "node": "Send log4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send log": {
+      "main": [
+        [
+          {
+            "node": "Send final message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0bc1d7fc-e712-4af8-b332-7640a15a085a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8baeb39a3b0b53ee1a7acb1ec40b2199ad1ceea7c7e99105ff2937c420e93851"
+  },
+  "id": "1fmuqerCLtyWsM2V",
+  "tags": []
+}
