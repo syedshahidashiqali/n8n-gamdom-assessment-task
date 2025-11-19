@@ -9,8 +9,10 @@ Although the assignment suggests Google Sheets, this implementation uses **Airta
 
 ---
 
-## Workflow Screenshot
+## ✅ Workflow Screenshot
 ![Workflow Screenshot](./gamdom-workflow-demo.png)
+
+---
 
 ## ✅ Workflow Summary
 
